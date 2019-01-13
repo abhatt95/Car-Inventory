@@ -1,0 +1,1093 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBVEVFEXwFR7vw51MRnvn5ie7snOD3iKXc",
+    authDomain: "inf551-projects.firebaseapp.com",
+    databaseURL: "https://inf551-projects.firebaseio.com",
+    projectId: "inf551-projects",
+    storageBucket: "inf551-projects.appspot.com",
+    messagingSenderId: "283444132904"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<style>
+
+.hidden {
+display:none;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+body {
+    background-repeat: no-repeat;
+}
+
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Used Car Inventory System</title>
+</head>
+
+<body bgcolor="#E6E6FA">
+ <center><font face="verdana"><h1>Used Car Inventory System</h1></font></center>
+ <center><font face="Courier" color="blue"><h3>Search Page</h3></font></center>   
+ <br><br>
+
+<center>
+ <font color="green" face="Courier"><label for="searcht"><b>Search Term:</b></label></font>
+ <input id="search" type="text" placeholder="Enter Search Term" name="searcht" required>
+<br><br>
+<b>Specific Search</b>
+<br>
+<br>
+<input type="radio" name="rdo" id="rdo1" value="data" checked="checked" >All Search Keys</input>
+<input type="radio" name="rdo" id="rdo2" value="make" >Make</input>
+<input type="radio" name="rdo" id="rdo3" value="year" >Year</input>
+<input type="radio" name="rdo" id="rdo4" value="vstyle" >Vehicle Style</input>
+<input type="radio" name="rdo" id="rdo5" value="vsize" >Vehicle Size</input>
+<br><br>
+
+
+<font color="green" face="Courier"><label for="nods" class="hidden"><b>Number of Doors:</b></label></font>
+<table id="nods" name="nods" class="hidden"> 
+<tr>
+<td>
+<input type="checkbox" name="cb1" id="c1" value="2" >2</input>
+<font color="green" face="Courier"><label id="label1"></label></font>
+</td>
+<td>
+<input type="checkbox" name="cb1" id="c2" value="3" >3</input>
+<font color="green" face="Courier"><label id="label2"></label></font>
+</td>
+<td>
+<input type="checkbox" name="cb1" id="c3" value="4" >4</input>
+<font color="green" face="Courier"><label id="label3"></label></font>
+</td>
+</tr>
+</table>
+
+<font color="green" face="Courier"><label for="trans" class="hidden"><b>Transmission Type:</b></label></font>
+<table id="trans" name="trans" class="hidden"> 
+<tr>
+<td>
+<input type="checkbox" name="cb2" id="c11" value="Manual" >Manual</input>
+<font color="green" face="Courier"><label id="label4"></label></font>
+</td>
+<td>
+<input type="checkbox" name="cb2" id="c12" value="Automatic" >Automatic</input>
+<font color="green" face="Courier"><label id="label5"></label></font>
+</td>
+</tr>
+</table>
+
+<font color="green" face="Courier"><label for="whls" class="hidden"><b>Driven Wheels:</b></label></font>
+<table id="whls" name="whls" class="hidden"> 
+<tr>
+<td>
+<input type="checkbox" name="cb3" id="c21" value="rear" >Rear wheel drive</input>
+<font color="green" face="Courier"><label id="label6"></label></font>
+</td>
+<td>
+<input type="checkbox" name="cb3" id="c22" value="front" >Front wheel drive</input>
+<font color="green" face="Courier"><label id="label7"></label></font>
+</td>
+<td>
+<input type="checkbox" name="cb3" id="c23" value="all" >All wheel drive</input>
+<font color="green" face="Courier"><label id="label8"></label></font>
+</td>
+<td>
+<input type="checkbox" name="cb3" id="c24" value="four" >Four wheel drive</input>
+<font color="green" face="Courier"><label id="label9"></label></font>
+</td>
+</tr>
+</table>
+
+<button id="Fetch">Search</button>
+<button id ="Save">Save Search</button>
+<br><br>
+<button id="update" class="hidden">Update Search</button>
+<!-- <br><br>-->
+<table id="result" class ="result" style="width:75%">
+<caption>Search Results</caption>
+<tr>
+<th>id</th>
+<th>Make</th>
+<th>Model</th>
+<th>Year</th>
+<th>Price</th>
+<th>Market Category</th>
+<th>Vehicle Style</th>
+<th>Vehicle Size</th>
+<th>Transmission Type</th>
+<th>Wheel Type</th>
+<th>Doors</th>
+<th>City Mileage</th>
+</tr>
+</table>
+
+<br><br>
+<button id="Refresh">Refresh</button>
+
+</center>
+ <br><br>
+ <center><a href="list.html" id ="addCars">Saved Search Terms</a></center>
+ <br>
+ <center><a href="facetf.html" id ="addCars">Advanced Search</a></center>
+ <br><br>
+ <center><button id ="btnLogout">Logout</button></center>
+ <br>
+<span id = "value"></span>
+
+<script type="text/javascript">
+var prevS = "";
+var mflag = 0;  
+var nods_cnt2 = 0;
+var nods_cnt3 = 0;
+var nods_cnt4 = 0;
+var cM = 0;
+var cA = 0;
+var crear = 0;
+var cfront = 0;
+var call = 0;
+var cfour = 0;
+var insert;
+var click = 0;
+
+const btnLogout = document.getElementById('btnLogout');
+
+btnLogout.addEventListener('click',e=>{
+console.log("Logout");
+firebase.auth().signOut();
+window.location.href = "loginpage.html";
+});
+
+
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
+function removerows_from(table){
+  console.log("Remove Rows");
+
+  if(table==null)
+  {
+  table="result";
+  }
+table = "result";
+console.log(table);
+var no_of_rows = document.getElementById(table).rows.length;
+console.log(no_of_rows);
+var i;
+for( i=1;i<=no_of_rows-1;i++)
+  {
+  document.getElementById(table).deleteRow(1);
+  }
+ //var searchT = document.getElementById("search"); 
+ //searchT.value = "";
+}
+
+function removerows_fromR(table){
+  console.log("Refresh");
+table = "result";
+console.log(table);
+var no_of_rows = document.getElementById(table).rows.length;
+console.log(no_of_rows);
+var i;
+for( i=1;i<=no_of_rows-1;i++)
+  {
+  document.getElementById(table).deleteRow(1);
+  }
+ var searchT = document.getElementById("search"); 
+ searchT.value = "";
+var rbtn = document.getElementById('rdo1');
+rbtn.checked = true;
+
+nods_cnt2 = 0;
+nods_cnt3 = 0;
+nods_cnt4 = 0;
+cM = 0;
+cA = 0;
+crear = 0;
+cfront = 0;
+call = 0;
+cfour = 0;
+
+document.getElementById('label1').innerText = "";
+document.getElementById('label2').innerText = "";
+document.getElementById('label3').innerText = "";
+document.getElementById('label4').innerText = "";
+document.getElementById('label5').innerText = "";
+document.getElementById('label6').innerText = "";
+document.getElementById('label7').innerText = "";
+document.getElementById('label8').innerText = "";
+document.getElementById('label9').innerText = "";
+
+document.getElementById('c1').checked = false;
+document.getElementById('c2').checked = false;
+document.getElementById('c3').checked = false;
+document.getElementById('c11').checked = false;
+document.getElementById('c12').checked = false;
+document.getElementById('c21').checked = false;
+document.getElementById('c22').checked = false;
+document.getElementById('c23').checked = false;
+document.getElementById('c24').checked = false;
+
+mflag = 0;
+prevS = "";
+}
+
+function UpdateCount(nod,ttt,DW){
+  if(nod == "2")
+{
+nods_cnt2 = nods_cnt2 + 1;
+}
+if(nod == "3")
+{
+nods_cnt3 = nods_cnt3 + 1;
+}
+if(nod == "4")
+{
+nods_cnt4 = nods_cnt4 + 1;
+}
+
+if(ttt == "AUTOMATIC")
+{
+cA += 1;
+}
+
+if(ttt == "MANUAL")
+{
+cM += 1;
+}
+
+if(DW == "rear wheel drive")
+{
+crear += 1;
+}
+
+if(DW == "front wheel drive")
+{
+cfront += 1;
+}
+
+if(DW == "all wheel drive")
+{
+call += 1;
+}
+
+if(DW == "four wheel drive")
+{
+cfour += 1;
+}
+}
+
+// query example: a single value
+  function redirect(){
+
+insert = 0;
+nods_cnt2 = 0;
+nods_cnt3 = 0;
+nods_cnt4 = 0;
+cM = 0;
+cA = 0;
+crear = 0;
+cfront = 0;
+call = 0;
+cfour = 0;
+document.getElementById('label1').innerText = 0;
+document.getElementById('label2').innerText = 0;
+document.getElementById('label3').innerText = 0;
+document.getElementById('label4').innerText = 0;
+document.getElementById('label5').innerText = 0;
+document.getElementById('label6').innerText = 0;
+document.getElementById('label7').innerText = 0;
+document.getElementById('label8').innerText = 0;
+document.getElementById('label9').innerText = 0;
+
+
+    console.log("Search - Redirect");
+  
+  var table = document.getElementById("result");
+
+  //alert("redirect was called");
+  removerows_from("result");
+ //var radioVal = gRadioValue;  
+    //console.log("radio value is "+radioVal);
+   // alert("radio value is "+radioVal);
+
+    //alert(document.getElementById("search").value);
+    prevS = document.getElementById("search").value;
+    var searchTerm = document.getElementById("search").value.toLowerCase();
+    //alert('all search terms',searchTerm);
+    var searchTerms = searchTerm.split(" ");
+    for(var x in searchTerms)
+    {
+      console.log(searchTerms[x]);
+    }
+    var value = document.getElementById("value");
+  //var dbRef = firebase.database().ref().child("brands/"+searchTerm);
+var tt = new Array();
+//var searchOn = ["brands", "DW", "EFT","enginehorsepower","MK","Model","Transmission","vehicle_size","vehicle_style","weather","Year"];
+//var searchOn = ["index1", "index8", "index4","index5","index10","index2","index7","index11","index12","index1","index3"];
+var radios = document.getElementsByName("rdo");
+var selectedr;
+
+for(var i = 0; i < radios.length; i++) {
+   if(radios[i].checked)
+       selectedr = radios[i].value;
+ }
+
+if(selectedr === "make")
+{
+var searchOn = ["index1"]; 
+}
+else if(selectedr === "year")
+{
+var searchOn = ["index3"]; 
+}
+else if(selectedr === "vstyle")
+{
+var searchOn = ["index12"]; 
+}
+else if(selectedr === "vsize")
+{
+var searchOn = ["index11"]; 
+}
+else{
+var searchOn = ["index1", "index8", "index4","index5","index10","index2","index7","index11","index12","index3"]; 
+//alert("Search on All!");
+}
+for(var x in searchTerms){
+console.log(searchTerms[x]);
+    for(var y in searchOn)
+{
+    var dbRef = firebase.database().ref().child(searchOn[y]+"/"+searchTerms[x]);
+      console.log("searching on ",y);
+
+  dbRef.on('value', function(snapshot) { 
+     //console.log("snapshot" + ": " + snapshot.val());
+     //value.innerText = snapshot.val();
+      var tt2 = snapshot.val();
+      console.log(tt2);
+      for (xx in tt2)
+      {
+      console.log(tt2[xx]);
+      tt.push(tt2[xx])
+      }       
+  });
+ }
+/*for(var i=0;i<100;i++){
+console.log('Timeout!');  
+} */
+ }
+   for( x in tt)
+    {
+      console.log('tt terms are',tt[x]);
+    }
+    console.log(tt.length);
+tt = tt.filter(onlyUnique);
+console.log(tt.length);
+//myRadioFunc();
+       /* for(var x in tt)
+     {
+     //console.log("ids "+x);
+     }
+     */
+   /* 
+    if(tt == undefined || tt.length == 0) {
+    alert("No car results found!");
+  }
+    */
+    if(tt.length == 0 ){ //&& click>0) {
+    alert("No car results found!");
+document.getElementById('label1').innerText = "";
+document.getElementById('label2').innerText = "";
+document.getElementById('label3').innerText = "";
+document.getElementById('label4').innerText = "";
+document.getElementById('label5').innerText = "";
+document.getElementById('label6').innerText = "";
+document.getElementById('label7').innerText = "";
+document.getElementById('label8').innerText = "";
+document.getElementById('label9').innerText = "";
+
+document.getElementById('c1').checked = false;
+document.getElementById('c2').checked = false;
+document.getElementById('c3').checked = false;
+document.getElementById('c11').checked = false;
+document.getElementById('c12').checked = false;
+document.getElementById('c21').checked = false;
+document.getElementById('c22').checked = false;
+document.getElementById('c23').checked = false;
+document.getElementById('c24').checked = false;
+//click+=1;
+//return;
+  }
+var tt_new = tt.reverse();
+
+     for (var x in tt_new) {
+//insert = 0;
+//console.log("Insert"+insert);
+//console.log("mflag"+mflag);
+      //console.log("value of x "+tt[x]);
+ // var ref = firebase.database().ref("CARS/"+(tt[x]-1)+"/"+(tt[x]));
+ var ref = firebase.database().ref("data/"+(tt_new[x]-1));
+  ref.once("value")
+   .then(function(snapshot) {
+   
+     var key = snapshot.key;
+     var Make = snapshot.child("/Make").val(); // to get make 
+     var DW = snapshot.child("/Driven_Wheels").val(); 
+     var EC = snapshot.child("/Engine Cylinders").val(); 
+     var EFT = snapshot.child("/Engine Fuel Type").val(); 
+     var EH = snapshot.child("/Engine HP").val(); 
+     var Id = snapshot.child("/Id").val(); 
+     var MSRP = snapshot.child("/MSRP").val(); 
+     var Make = snapshot.child("/Make").val(); 
+     var MC = snapshot.child("/Market Category").val(); 
+     var M = snapshot.child("/Model").val(); 
+     var nod = snapshot.child("/Number of Doors").val(); 
+     var p = snapshot.child("/Popularity").val(); 
+     var ttt = snapshot.child("/Transmission Type").val(); 
+     var vs = snapshot.child("/Vehicle Size").val(); 
+     var vst = snapshot.child("/Vehicle Style").val(); 
+     var y = snapshot.child("/Year").val(); 
+     var cml = snapshot.child("/city mpg").val(); 
+     var hm = snapshot.child("/highway MPG").val(); 
+
+if(mflag == 1 ){
+if(document.getElementById('c1').checked == true){
+if(nod == "2"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+if(document.getElementById('c2').checked == true){
+if(nod == "3"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}  
+
+}
+if(document.getElementById('c3').checked == true){
+if(nod == "4"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+
+/////
+if(document.getElementById('c11').checked == true){
+if(ttt == "MANUAL"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+
+if(document.getElementById('c12').checked == true){
+if(ttt == "AUTOMATIC"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+////
+if(document.getElementById('c21').checked == true){
+if(DW == "rear wheel drive"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+
+if(document.getElementById('c22').checked == true){
+if(DW == "front wheel drive"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+
+if(document.getElementById('c23').checked == true){
+if(DW == "all wheel drive"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+
+if(document.getElementById('c24').checked == true){
+if(DW == "four wheel drive"){
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+
+UpdateCount(nod,ttt,DW);
+insert = 1;
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+}
+}
+////
+//console.log("Insert2"+insert);
+}
+else
+{
+     //console.log(key+" "+Make+" "+MC+" "+hm);
+     console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      var cell9 = row.insertCell(9);
+      var cell10 = row.insertCell(10);
+      var cell11 = row.insertCell(11);
+
+
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = y;
+      cell4.innerHTML = MSRP;
+      cell5.innerHTML = MC;
+      cell6.innerHTML = vst;
+      cell7.innerHTML = vs;
+      cell8.innerHTML = ttt;
+      cell9.innerHTML = DW;
+      cell10.innerHTML = nod;
+      cell11.innerHTML = cml;
+      
+if(nod == "2")
+{
+nods_cnt2 = nods_cnt2 + 1;
+}
+if(nod == "3")
+{
+nods_cnt3 = nods_cnt3 + 1;
+}
+if(nod == "4")
+{
+nods_cnt4 = nods_cnt4 + 1;
+}
+
+if(ttt == "AUTOMATIC")
+{
+cA += 1;
+}
+
+if(ttt == "MANUAL")
+{
+cM += 1;
+}
+
+if(DW == "rear wheel drive")
+{
+crear += 1;
+}
+
+if(DW == "front wheel drive")
+{
+cfront += 1;
+}
+
+if(DW == "all wheel drive")
+{
+call += 1;
+}
+
+if(DW == "four wheel drive")
+{
+cfour += 1;
+}
+
+//console.log("Nod: "+nod);
+//console.log(nod == "2");
+//console.log(nods_cnt2);
+//console.log(nods_cnt3);
+//console.log(nods_cnt4);
+
+document.getElementById('label1').innerText = nods_cnt2;
+document.getElementById('label2').innerText = nods_cnt3;
+document.getElementById('label3').innerText = nods_cnt4;
+document.getElementById('label4').innerText = cM;
+document.getElementById('label5').innerText = cA;
+document.getElementById('label6').innerText = crear;
+document.getElementById('label7').innerText = cfront;
+document.getElementById('label8').innerText = call;
+document.getElementById('label9').innerText = cfour;
+if(nods_cnt2>0){
+document.getElementById('c1').checked = true;
+}
+if(nods_cnt3>0){
+document.getElementById('c2').checked = true;
+}
+if(nods_cnt4>0){
+document.getElementById('c3').checked = true;
+}
+if(cM>0){
+document.getElementById('c11').checked = true;
+}
+if(cA>0){
+document.getElementById('c12').checked = true;
+}
+
+if(crear>0){
+document.getElementById('c21').checked = true;
+}
+if(cfront>0){
+document.getElementById('c22').checked = true;
+}
+if(call>0){
+document.getElementById('c23').checked = true;
+}
+if(cfour>0){
+document.getElementById('c24').checked = true;
+}
+
+}
+   });
+
+      
+     }
+//mflag = 0;         
+//console.log("FINAL NOD2"+nods_cnt2);
+
+}
+
+
+
+
+</script>
+
+<script type="text/javascript">
+var queryString = decodeURIComponent(window.location.search);
+queryString = queryString.substring(1);
+if(queryString)
+{
+alert("Saved String is: "+queryString);
+document.getElementById("search").value = queryString;
+//redirect(queryString);
+//redirect(queryString);
+}
+else{
+console.log("No saved search!");
+}  
+</script>
+
+<script type="text/javascript">
+const Fetch = document.getElementById('Fetch');
+const Refresh = document.getElementById('Refresh');
+Fetch.addEventListener('click',redirect,false);
+Refresh.addEventListener('click',removerows_fromR,false);
+</script>
+
+<script type="text/javascript">
+const btnSave = document.getElementById('Save');
+btnSave.addEventListener('click',e=>{
+console.log('Saved Search.');
+st = document.getElementById("search").value;
+if(st){
+var user_to_find = firebase.auth().currentUser.uid;
+var usersList = firebase.database().ref("users/");
+usersList.push ({
+   uid: user_to_find,
+   Term: st
+});
+
+alert('Saved');  
+}
+else
+{
+alert('Search Box is Empty!');
+}
+
+});
+</script>
+<script type="text/javascript">
+const Update = document.getElementById('update');
+
+Update.addEventListener('click',e=>{
+console.log("Faceted Update.");
+
+if(document.getElementById("search").value == "" || (document.getElementById("search").value!= prevS && prevS!="") || (document.getElementById('label1').innerText == "" && document.getElementById('label2').innerText == "" && document.getElementById('label3').innerText == "") || (document.getElementById('label4').innerText == "" && document.getElementById('label5').innerText == "") || (document.getElementById('label6').innerText == "" && document.getElementById('label7').innerText == "" && document.getElementById('label8').innerText == "" && document.getElementById('label9').innerText == "") ){
+  alert("Facets are empty. Please perform a search.\nFaceted search is activated only after a search is performed!\n");
+}
+else if (((document.getElementById('c1').checked == true)||(document.getElementById('c2').checked == true)||(document.getElementById('c3').checked == true)) && ((document.getElementById('c11').checked == true)||(document.getElementById('c12').checked == true)) && ((document.getElementById('c21').checked == true)||(document.getElementById('c22').checked == true)||(document.getElementById('c23').checked == true)||(document.getElementById('c24').checked == true))) {
+  alert("Only one facet can be selected at a time.");
+}
+else if( (((document.getElementById('c1').checked == true)||(document.getElementById('c2').checked == true)||(document.getElementById('c3').checked == true)) && ((document.getElementById('c11').checked == true)||(document.getElementById('c12').checked == true)))  ||  (((document.getElementById('c11').checked == true)||(document.getElementById('c12').checked == true)) && ((document.getElementById('c21').checked == true)||(document.getElementById('c22').checked == true)||(document.getElementById('c23').checked == true)||(document.getElementById('c24').checked == true))) || (((document.getElementById('c1').checked == true)||(document.getElementById('c2').checked == true)||(document.getElementById('c3').checked == true)) && ((document.getElementById('c21').checked == true)||(document.getElementById('c22').checked == true)||(document.getElementById('c23').checked == true)||(document.getElementById('c24').checked == true)))) {
+ alert("Only one facet can be selected at a time.");
+}
+else{
+mflag = 1;
+prevS = document.getElementById("search").value;
+redirect();
+//mflag = 0;  
+}
+
+//document.getElementById('c1').checked = false;
+//document.getElementById('c2').checked = false;
+//document.getElementById('c3').checked = false;
+
+});
+</script>
+</body>
+
+</html>

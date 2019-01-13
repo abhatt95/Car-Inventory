@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBVEVFEXwFR7vw51MRnvn5ie7snOD3iKXc",
+    authDomain: "inf551-projects.firebaseapp.com",
+    databaseURL: "https://inf551-projects.firebaseio.com",
+    projectId: "inf551-projects",
+    storageBucket: "inf551-projects.appspot.com",
+    messagingSenderId: "283444132904"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<style>
+
+.hidden {
+display:none;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.b1 {
+background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+body {
+    background-repeat: no-repeat;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Used Car Inventory System</title>
+</head>
+
+<body bgcolor="#E6E6FA">
+ <center><font face="verdana"><h1>Used Car Inventory System</h1></font></center>
+ <center><font face="Courier" color="blue"><h3>Saved Search Page</h3></font></center>   
+
+<br>
+<center>
+<p>
+ List of saved search terms for: 
+ <span id= "userInfo"  ></span>         
+<span id ="nothing">
+</span>
+ 
+ </p>
+ <table id="result">
+<tr>
+<td>
+  Search Term
+</td>
+</tr>
+</table>
+
+<br><br>
+</center>
+<center><button id ="btnBack" class = "b1">Go Back</button></center>
+
+
+<script type="text/javascript">
+const btnBack = document.getElementById('btnBack');
+btnBack.addEventListener('click',e=>{
+console.log("Back.");
+window.location.href = "main.html";
+});
+</script>
+
+<script type="text/javascript">
+var table = document.getElementById("result");
+
+firebase.auth().onAuthStateChanged(firebaseUser => {
+if(firebaseUser) {
+console.log('is signed in');
+const userInfo = document.getElementById('userInfo');   
+  userInfo.innerHTML = firebase.auth().currentUser.email;
+  removerows_from("result");
+  loadList();
+}
+else{
+console.log('not signed in');
+//alert("User is not signed in!");
+}
+});
+
+function loadList()
+{
+
+    var dbRef = firebase.database().ref().child("users/"+firebase.auth().currentUser.uid);
+  dbRef.on('value', function(snapshot) { 
+     console.log("snapshot" + ": " + snapshot.val());
+     //value.innerText = snapshot.val();
+      var tt2 = snapshot.val();
+      console.log(tt2);
+      });
+ console.log("uid search for is ",firebase.auth().currentUser.uid);
+var usersRef = firebase.database().ref('users');
+ usersRef.orderByChild('uid').equalTo(firebase.auth().currentUser.uid).on("value", function(snapshot) {
+    console.log(snapshot.val());
+            console.log(snapshot.child("/Term").val());
+            removerows_from("result");
+if(snapshot.exists())
+  {  snapshot.forEach(function(data) {
+        //console.log(data.key);
+        
+        console.log(data.child("/Term").val());
+      var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+            cell0.innerHTML = data.child("/Term").val() ;
+      //      cell1.innerHTML = data.key;
+var btn = document.createElement("BUTTON");
+//btn.name = data.child("/Term").val();
+btn.name = data.key;
+//btn.onclick = "DeleteFunc("+data.key+")";
+btn.addEventListener('click', function(){
+    DeleteFunc(data.key);
+});
+
+        var t = document.createTextNode("Delete");
+        btn.appendChild(t);
+        cell1.appendChild(btn);
+      var cell2 = row.insertCell(1);
+var btn2 = document.createElement("BUTTON");
+//btn.name = data.child("/Term").val();
+btn2.name = data.key;
+//btn.onclick = "DeleteFunc("+data.key+")";
+btn2.addEventListener('click', function(){
+    goToFunc(data.child("/Term").val());
+});
+  var t2 = document.createTextNode("Go to");
+        btn2.appendChild(t2);
+        cell2.appendChild(btn2);
+
+    });
+    }
+    else
+    {
+    document.getElementById('nothing').value = "Nothing is saved yet";
+    }
+});    
+}
+
+
+
+function removerows_from(table){
+if(table==null)
+{
+table="result";
+}
+table = "result";
+var no_of_rows = document.getElementById(table).rows.length;
+console.log(no_of_rows);
+var i;
+for( i=1;i<=no_of_rows-1;i++)
+{
+document.getElementById(table).deleteRow(1);
+}
+
+}
+
+function DeleteFunc(key){
+var usersRef = firebase.database().ref('users/'+key);
+usersRef.once('value', function(snapshot) {
+  if (snapshot.exists()) {
+    alert('Deleted');
+      usersRef.remove();
+loadList();
+  }
+});
+
+
+}
+
+function goToFunc(searchTerm){
+
+var qs = "?" + searchTerm;
+window.location.href = "main.html" + qs;
+
+}
+</script>
+
+</body>
+</html>

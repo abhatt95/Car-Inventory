@@ -1,0 +1,1067 @@
+<!--  Try for intersection of 2 facets get id's of 1 id's of 2 than take intersection only put ids that are in intersection-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+.hidden {
+display:none;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+body {
+    background-repeat: no-repeat;
+}
+</style>
+<script src="https://cdn.firebase.com/libs/firebaseui/2.7.0/firebaseui.js"></script>
+<script src="app.js" ></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.7.0/firebaseui.css" />
+<script src="https://www.gstatic.com/firebasejs/ui/2.7.0/firebase-ui-auth__en.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/2.7.0/firebase-ui-auth.css" />
+<title>Used Car Inventory System</title>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<body bgcolor="#E6E6FA">
+  <center><font face="verdana"><h1>Used Car Inventory System</h1></font></center>
+ <center><font face="Courier" color="blue"><h3>Advanced Search Page</h3></font></center>   
+ <center>
+ <br><br>
+
+<b>Faceted Search</b>
+
+<br><br>
+<button type="button" onclick="removerows_from(); sort2();">Refresh</button>
+
+<button type="button" onclick="redirect();">Find</button>
+<button type="button" onclick="sort();">Update Facets</button>
+
+<div id ="facteted_tt">
+
+<font color="green" face="Courier"><label id="21" class="hidden"><b>Number of Doors:</b></label></font>
+
+<input type="checkbox" id="2" onchange="foo()" class ="hidden">
+    <label id="2c" class="hidden">2</label>
+
+<input type="checkbox" id="3" onchange="foo()" class ="hidden">
+    <label id="3c" class="hidden">3</label>
+
+<input type="checkbox" id="4" onchange="foo()" class ="hidden">
+    <label id="4c" class="hidden">4</label>
+<input type="checkbox" id="drive" onchange="foo()" class ="hidden">
+    
+</div>
+
+
+<div id ="facteted_vs">
+  <font color="green" face="Courier"><label id="22" class="hidden"><b>Vehicle size:</b></label></font>
+<input type="checkbox" id="Compact" onchange="foo()" class ="hidden">
+    <label id="Compactc" class="hidden">compact</label>
+
+<input type="checkbox" id="Midsize" onchange="foo()" class ="hidden">
+    <label id="Midsizec" class="hidden">Midsize</label>
+
+<input type="checkbox" id="Large" onchange="foo()" class ="hidden">
+    <label id="Largec" class="hidden">Large</label>
+
+</div>
+
+<div id ="facteted_year">
+  <font color="green" face="Courier"><label id="23" class="hidden"><b>Year:</b></label></font>
+<input type="checkbox" id="1990" onchange="foo()" class ="hidden" name ="1990"></input>
+    <label id="1990c" class="hidden">1990</label>
+<input type="checkbox" id="1991" onchange="foo()" class ="hidden"></input>
+    <label id="1991c" class="hidden">1991</label>
+<input type="checkbox" id="1992" onchange="foo()" class ="hidden"></input>
+    <label id="1992c" class="hidden">1992</label>
+
+<input type="checkbox" id="1993" onchange="foo()" class ="hidden"></input>
+    <label id="1993c" class="hidden">1993</label>
+
+<input type="checkbox" id="1994" onchange="foo()" class ="hidden"></input>
+    <label id="1994c" class="hidden">1994</label>
+
+<input type="checkbox" id="1995" onchange="foo()" class ="hidden" ></input>
+    <label id="1995c" class="hidden">1995</label>
+
+<input type="checkbox" id="1996" onchange="foo()"class ="hidden"></input>
+    <label id="1996c" class="hidden">1996</label>
+
+<input type="checkbox" id="1997" onchange="foo()"class ="hidden"></input>
+
+    <label id="1997c" class="hidden">1997</label>
+<input type="checkbox" id="1998" onchange="foo()"class ="hidden"></input>
+    <label id="1998c" class="hidden">1998</label>
+<input type="checkbox" id="1999" onchange="foo()"class ="hidden"></input>
+    <label id="1999c" class="hidden">1999</label>
+<input type="checkbox" id="2000" onchange="foo()"class ="hidden"></input>
+    <label id="2000c" class="hidden">2000</label>
+<input type="checkbox" id="2001" onchange="foo()"class ="hidden"></input>
+    <label id="2001c" class="hidden">2001</label>
+<input type="checkbox" id="2002" onchange="foo()"class ="hidden"></input>
+    <label id="2002c" class="hidden">2002</label>
+<input type="checkbox" id="2003" onchange="foo()"class ="hidden"></input>
+    <label id="2003c" class="hidden">2003</label>
+<input type="checkbox" id="2004" onchange="foo()"class ="hidden"></input>
+    <label id="2004c" class="hidden">2004</label>
+<input type="checkbox" id="2005" onchange="foo()"class ="hidden"></input>
+    <label id="2005c" class="hidden">2005</label>
+<input type="checkbox" id="2006" onchange="foo()"class ="hidden"></input>
+    <label id="2006c" class="hidden">2006</label>
+<input type="checkbox" id="2007" onchange="foo()"class ="hidden"></input>
+    <label id="2007c" class="hidden">2007</label>
+<input type="checkbox" id="2008" onchange="foo()"class ="hidden"></input>
+    <label id="2008c" class="hidden">2008</label>
+<input type="checkbox" id="2009" onchange="foo()"class ="hidden"></input>
+    <label id="2009c" class="hidden">2009</label>
+<input type="checkbox" id="2010" onchange="foo()"class ="hidden"></input>
+    <label id="2010c" class="hidden">2010</label>
+<input type="checkbox" id="2011" onchange="foo()"class ="hidden"></input>
+    <label id="2011c" class="hidden">2011</label>
+<input type="checkbox" id="2012" onchange="foo()"class ="hidden"></input>
+    <label id="2012c" class="hidden">2012</label>
+<input type="checkbox" id="2013" onchange="foo()"class ="hidden"></input>
+    <label id="2013c" class="hidden">2013</label>
+<input type="checkbox" id="2014" onchange="foo()"class ="hidden"></input>
+    <label id="2014c" class="hidden">2014</label>
+<input type="checkbox" id="2015" onchange="foo()"class ="hidden"></input>
+    <label id="2015c" class="hidden">2015</label>
+<input type="checkbox" id="2016" onchange="foo()"class ="hidden"></input>
+    <label id="2016c" class="hidden">2016</label>
+<input type="checkbox" id="2017" onchange="foo()"class ="hidden" ></input>
+    <label id="2017c" class="hidden">2017</label>
+
+
+</div>
+
+<font color="green" face="Courier"><label for="searcht"><b>Search Term:</b></label></font>
+<input type="text" id="search">
+
+</input>
+<br><br>
+<!--<span id="value">hot</span>-->
+<table id="result">
+<tr>
+<td>
+  id
+</td>
+<td>
+Make
+</td>
+<td>
+Model
+</td>
+<td>
+MSRP
+</td>
+<td>
+Market Category
+</td>
+<td>
+Vehical Style
+</td>
+<td>
+Year
+</td>
+<td>
+Transmission
+</td>
+</tr>
+
+</table>
+<br><br>
+<button id ="btnBack" class = "b1">Go Back</button>
+<button id ="Save">Save Search</button>
+<br><br>
+<a href="list.html" id ="addCars">Saved Search Terms</a></center>
+<br><br>
+<script type="text/javascript">
+const btnBack = document.getElementById('btnBack');
+btnBack.addEventListener('click',e=>{
+console.log("Back.");
+window.location.href = "main.html";
+});
+</script>
+<script type="text/javascript">
+var queryString = decodeURIComponent(window.location.search);
+queryString = queryString.substring(1);
+if(queryString)
+{
+alert("Saved String is: "+queryString);
+document.getElementById("search").value = queryString;
+//redirect(queryString);
+//redirect(queryString);
+}
+else{
+console.log("No saved search!");
+}  
+</script>
+</center>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<script>
+var checkedyears = [];
+var checkbox1990 = document.getElementById("1990");
+var checkbox1991 = document.getElementById("1991");
+var checkbox1992 = document.getElementById("1992");
+var checkbox1993 = document.getElementById("1993");
+var checkbox1994 = document.getElementById("1994");
+var checkbox1995 = document.getElementById("1995");
+var checkbox1996 = document.getElementById("1996");
+var checkbox1997 = document.getElementById("1997");
+var checkbox1998 = document.getElementById("1998");
+var checkbox1999 = document.getElementById("1999");
+var checkbox2000 = document.getElementById("2000");
+var checkbox2001 = document.getElementById("2001");
+var checkbox2002 = document.getElementById("2002");
+var checkbox2003 = document.getElementById("2003");
+var checkbox2004 = document.getElementById("2004");
+var checkbox2005 = document.getElementById("2005");
+var checkbox2006 = document.getElementById("2006");
+var checkbox2007 = document.getElementById("2007");
+var checkbox2008 = document.getElementById("2008");
+var checkbox2009 = document.getElementById("2009");
+var checkbox2010 = document.getElementById("2010");
+var checkbox2011 = document.getElementById("2011");
+var checkbox2012 = document.getElementById("2012");
+var checkbox2013 = document.getElementById("2013");
+var checkbox2014 = document.getElementById("2014");
+var checkbox2015 = document.getElementById("2015");
+var checkbox2016 = document.getElementById("2016");
+var checkbox2017 = document.getElementById("2017");
+
+
+var checkedvs = [];
+// for vehicle size
+var allvs = ["Compact","Midsize","Large"];
+var todisplay = [];
+var todisplay_year = [];
+var todisplay_vs = [];
+
+
+var checkeddoors = [];
+// fro transmission 
+var alltt = ["automated","automatic","direct","drive","manual","unknown"];
+var todisplay_dd = [];
+
+function foo(){
+todisplay_year = [];
+todisplay_vs = [];
+todisplay_dd = [];
+todisplay = [];
+var size =  [];
+var year = [];
+checkedyears = [];
+checkedvs = [];
+checkeddoors =[];
+var fac_check = false;
+
+
+// all for first facet
+for(i= 1990;i<2018;i++)
+{
+if (document.getElementById(i.toString()).checked==true) {
+fac_check = true;
+var index = checkedyears.indexOf(i.toString());
+
+if(index > -1)
+{
+}
+else
+{
+console.log(i.toString());
+checkedyears.push(i.toString());
+}
+}
+
+}
+// till here 
+for(i in allvs)
+{
+if (document.getElementById(allvs[i]).checked==true) {
+fac_check = true;
+var index = checkedvs.indexOf(allvs[i]);
+
+if(index > -1)
+{
+}
+else
+{
+console.log("added ",allvs[i]);
+checkedvs.push(allvs[i]);
+}
+}
+
+}
+
+//f or no of doors
+// all for first facet
+for(i= 2;i<5;i++)//am hereeeeee
+{
+if (document.getElementById(i.toString()).checked==true) {
+fac_check = true;
+var index = checkeddoors.indexOf(i.toString());
+
+if(index > -1)
+{
+}
+else
+{
+console.log(i.toString());
+checkeddoors.push(i.toString());
+}
+}
+
+
+}
+
+
+allcheckedThings();
+if(!fac_check)
+{
+redirect();
+}
+}
+
+function allcheckedThings(){
+
+for (x in checkedyears)
+{
+console.log("checked ",checkedyears[x]);
+}
+for (x in checkedvs)
+{
+console.log("checked ",checkedvs[x]);
+
+}
+for (x in checkeddoors)
+{
+console.log("checked ",checkeddoors[x]);
+
+}
+  removerows_from("result");
+//update_Table();
+//entire update function 
+
+var already_displayed = [];
+  removerows_from("result");
+
+console.log("hello");
+// for year
+if(checkedyears.length>0)
+{
+console.log("was here");
+for(i in checkedyears)
+{
+for(j in car_ye)
+{
+if(car_ye[j]==checkedyears[i])
+{
+already_displayed.push(j);
+todisplay_year.push(j);
+
+
+     
+}
+
+}
+}
+}
+// year ends here
+// for size
+if(checkedvs.length>0)
+{
+console.log("was here for vs");
+for(i in checkedvs)
+{
+for(j in car_vs)
+{
+if(car_vs[j]==checkedvs[i])
+{
+todisplay_vs.push(j);
+
+}
+}
+}
+}
+
+//size ends here
+
+//doors
+if(checkeddoors.length>0)
+{
+console.log("was here for vs");
+for(i in checkeddoors)
+{
+for(j in car_tt)
+{
+if(car_tt[j]==checkeddoors[i])
+{
+todisplay_dd.push(j);
+
+}
+}
+}
+}
+// till here
+var adddis=[];
+console.log(todisplay_year.length);
+console.log(todisplay_vs.length);
+console.log(todisplay_dd.length);
+
+if(todisplay_year.length>0&&todisplay_vs.length>0&&todisplay_dd.length>0)
+{
+console.log("intersection of all three");
+adddis = intersect(todisplay_year,todisplay_vs);
+//console.log("to display",todisplay.length);
+console.log("adddis",adddis.length);
+
+todisplay = intersect(adddis,todisplay_dd);
+console.log("to display",todisplay.length);
+}
+else
+{
+if(todisplay_year.length>0&&todisplay_vs.length>0&&todisplay_dd.length==0)
+{
+adddis = intersect(todisplay_year,todisplay_vs);
+
+console.log("2 1");
+
+todisplay = adddis;
+}
+if(todisplay_year.length>0&&todisplay_dd.length>0&&todisplay_vs.length==0)
+{
+adddis = intersect(todisplay_year,todisplay_dd);
+
+console.log("2 2");
+
+todisplay = adddis;
+}
+if(todisplay_vs.length>0&&todisplay_dd.length>0&&todisplay_year.length==0)
+{
+adddis = intersect(todisplay_vs,todisplay_dd);
+
+console.log("2 3");
+
+todisplay = adddis;
+}
+if(todisplay_vs.length>0&&todisplay_dd.length==0&&todisplay_year.length==0)
+{
+console.log(" 1 1");
+
+todisplay = todisplay_vs;
+
+}
+if(todisplay_vs.length==0&&todisplay_dd.length>0&&todisplay_year.length==0)
+{
+console.log("1  2");
+
+todisplay = todisplay_dd;
+
+}
+if(todisplay_vs.length==0&&todisplay_dd.length==0&&todisplay_year.length>0)
+{
+console.log("1 3 ");
+
+todisplay = todisplay_year;
+
+}
+
+}
+console.log(todisplay.length);
+  removerows_from("result");
+
+for(x in todisplay)
+{
+ var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+
+
+      cell0.innerHTML = car_id[todisplay[x]];
+      cell1.innerHTML = car_ma[todisplay[x]];
+      cell2.innerHTML = car_mo[todisplay[x]];
+      cell3.innerHTML = car_ms[todisplay[x]];
+      cell4.innerHTML = car_mc[todisplay[x]];
+      cell5.innerHTML = car_vs[todisplay[x]];
+      cell6.innerHTML = car_ye[todisplay[x]];
+      cell7.innerHTML = car_tt[todisplay[x]];
+
+}
+
+//till here 
+}
+
+function update_Table(){
+
+
+var already_displayed = [];
+  removerows_from("result");
+
+console.log("hello");
+// for year
+if(checkedyears.length>0)
+{
+console.log("was here");
+for(i in checkedyears)
+{
+for(j in car_ye)
+{
+if(car_ye[j]==checkedyears[i])
+{
+already_displayed.push(j);
+todisplay_year.push(j);
+
+var index = todisplay_year.indexOf(j);
+if (index > -1) {
+console.log("already at ", index);
+}
+else
+
+{
+
+todisplay_year.push(j);
+console.log("added ",j);
+}
+
+     
+}
+
+}
+}
+}
+// year ends here
+// for size
+if(checkedvs.length>0)
+{
+console.log("was here for vs");
+for(i in checkedvs)
+{
+for(j in car_vs)
+{
+//console.log(car_ye[j]," ",checkedyears[i]);
+if(car_vs[j]==checkedvs[i])
+{
+var index = already_displayed.indexOf(j);
+if (index > -1) {
+//  array.splice(index, 1);
+}
+else{
+already_displayed.push(j);
+todisplay_vs.push(j);
+var index = todisplay_vs.indexOf(j);
+if (index > -1) {
+}
+else
+
+{todisplay_vs.push(j);
+console.log("added ",j);
+
+}
+
+      }
+      
+     
+}
+}
+}
+}
+
+//size ends here
+if(todisplay_year.length>0&&todisplay_vs.length>0)
+{
+console.log("was in intersection");
+todisplay = intersect(todisplay_year,todisplay_vs);
+
+}
+else
+{
+if(todisplay_year.length>0)
+{
+console.log("year in intersection");
+
+todisplay = todisplay_year;
+}
+else
+{
+console.log("vehicle size in intersection");
+
+todisplay = todisplay_vs;
+
+}
+}
+console.log(todisplay.length);
+  removerows_from("result");
+
+for(x in todisplay)
+{
+ var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      //var cell6 = row.insertCell(6);
+
+
+      cell0.innerHTML = car_id[todisplay[x]];
+      cell1.innerHTML = car_ma[todisplay[x]];
+      cell2.innerHTML = car_mo[todisplay[x]];
+      cell3.innerHTML = car_ms[todisplay[x]];
+      cell4.innerHTML = car_mc[todisplay[x]];
+      cell5.innerHTML = car_vs[todisplay[x]];
+      cell6.innerHTML = car_ye[todisplay[x]];
+      cell7.innerHTML = car_tt[todisplay[x]];
+
+}
+
+}
+function intersect(a, b) {
+    var t;
+    if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+    return a.filter(function (e) {
+        return b.indexOf(e) > -1;
+    });
+}
+
+function removerows_from(table){
+if(table==null)
+{
+table="result";
+}
+var no_of_rows = document.getElementById(table).rows.length;
+console.log(no_of_rows);
+var i;
+for( i=1;i<=no_of_rows-1;i++)
+{
+document.getElementById(table).deleteRow(1);
+}
+
+}
+</script>
+<script>
+var current_cars = [];
+
+
+var car_id = [];
+var car_ma = [];
+var car_mo = [];
+var car_ms = [];
+var car_mc = [];
+var car_vs = [];
+var car_ye = [];
+var car_tt = [];
+
+var car_def = function(Id, Make, Model,MSRP,MarketCat,vehicalstyle,year,tt){
+    this.Id = Id; 
+    this.Make = Make; 
+    this.Model = Model;
+    this.MSRP = MSRP;
+    this.MarketCat = MarketCat;
+    this.vehicalstyle = vehicalstyle;
+    this.year = year;
+    this.tt = tt;
+    };
+  // Initialize Firebase
+   var table = document.getElementById("result");
+
+  // Initialize Firebase
+ var config = {
+    apiKey: "AIzaSyBVEVFEXwFR7vw51MRnvn5ie7snOD3iKXc",
+    authDomain: "inf551-projects.firebaseapp.com",
+    databaseURL: "https://inf551-projects.firebaseio.com",
+    projectId: "inf551-projects",
+    storageBucket: "inf551-projects.appspot.com",
+    messagingSenderId: "283444132904"
+  };
+  firebase.initializeApp(config);
+  
+window.onload = function() {
+var value = document.getElementById("value");
+var dbref = firebase.database().ref().child("car1");
+//alert(dbref)
+dbref.on('value', snap => value.innerText = snap.val());
+
+
+};
+  
+
+  function redirect(){
+  //console.log("con 1");
+  removerows_from("result");
+ var radioVal = gRadioValue;  
+
+    alert(document.getElementById("search").value);
+    var searchTerm = document.getElementById("search").value.toLowerCase();
+    var searchTerms = searchTerm.split(" ");
+    for(var x in searchTerms)
+    {console.log(searchTerms[x]);}
+    var value = document.getElementById("value");
+  //var dbRef = firebase.database().ref().child("brands/"+searchTerm);
+var tt = new Array();
+//var searchOn = ["brands", "DW", "EFT","enginehorsepower","MK","Model","Transmission","vehicle_size","vehicle_style","weather","Year"];
+var searchOn = ["index1", "index8", "index4","index5","index10","index2","index7","index11","index12","index3","index9"];
+for(var x in searchTerms){
+ // console.log("con 2");
+
+//console.log("searching on ",y);
+   for(var y in searchOn)
+{
+  console.log("con 3");
+console.log("search on",searchOn[y]," search term ",searchTerms[x]);
+    var dbRef = firebase.database().ref().child(searchOn[y]+"/"+searchTerms[x]);
+      console.log(searchTerms[x]);
+flag = true
+
+  dbRef.on('value', function(snapshot) {
+  /*if(!flag)
+  {
+  return;
+  }
+  */
+    console.log("con 4");
+ 
+    
+      var tt2 = snapshot.val();
+      if(tt2!=null)
+      {
+      console.log(tt2);
+      for (xx in tt2)
+      {
+      console.log(tt2[xx]);
+      tt.push(tt2[xx])
+      }
+      }
+      else
+      {
+    //  goto beginning;
+      //flag = false;
+      //return;
+      }
+     
+         
+  });
+
+  console.log("between 4 and 5");
+ }
+     console.log("con 5");
+
+ }
+    //  alert("con 6");
+console.log(" length is ",tt.length);
+
+    console.log(tt.length);
+tt = tt.filter(onlyUnique);
+console.log(tt.length);
+
+     for (var x in tt) {
+   
+ var ref = firebase.database().ref("data/"+(tt[x]-1));
+  ref.once("value")
+   .then(function(snapshot) {
+   
+     var key = snapshot.key;
+     var Make = snapshot.child("/Make").val(); // to get make 
+     var DW = snapshot.child("/Driven_Wheels").val(); 
+     var EC = snapshot.child("/Engine Cylinders").val(); 
+     var EFT = snapshot.child("/Engine Fuel Type").val(); 
+     var EH = snapshot.child("/Engine HP").val(); 
+     var Id = snapshot.child("/Id").val(); 
+     var MSRP = snapshot.child("/MSRP").val(); 
+     var Make = snapshot.child("/Make").val(); 
+     var MC = snapshot.child("/Market Category").val(); 
+     var M = snapshot.child("/Model").val(); 
+     var nod = snapshot.child("/Number of Doors").val(); 
+     var p = snapshot.child("/Popularity").val(); 
+     var ttt = snapshot.child("/Transmission Type").val(); 
+     var vs = snapshot.child("/Vehicle Size").val(); 
+     var vst = snapshot.child("/Vehicle Style").val(); 
+     var y = snapshot.child("/Year").val(); 
+     var cm = snapshot.child("/city mpg").val(); 
+     var hm = snapshot.child("/highway MPG").val(); 
+
+
+     //console.log(key+" "+Make+" "+MC+" "+hm);
+     //console.log(snapshot.val());
+     var row = table.insertRow(1);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
+      var cell8 = row.insertCell(8);
+      //var cell6 = row.insertCell(6);
+
+
+      cell0.innerHTML = Id;
+      cell1.innerHTML = Make;
+      cell2.innerHTML = M;
+      cell3.innerHTML = MSRP;
+      cell4.innerHTML = MC;
+      cell5.innerHTML = vs;
+      cell6.innerHTML = y;
+      cell7.innerHTML = nod.toLowerCase();
+       car_id.push(Id);
+ car_ma.push(Make) ;
+ car_mo.push(M) ;
+ car_ms.push(MSRP) ;
+ car_mc.push(MC) ;
+ car_vs.push(vs) ;
+ car_ye.push(y) ;
+ car_tt.push(nod);
+
+
+      current_cars.push( new car_def(Id,Make,M,MSRP,MC,vs,y,ttt));
+  
+   });
+
+      
+     }
+  
+     for (x in current_cars)
+{
+console.log(x.MSRP);
+console.log("m c ",x.MC);
+}
+     
+//allstoredcar();
+
+// calling for facets 
+sort();
+}
+function allstoredcar(){
+console.log("was here");
+    for (x in current_cars)
+{
+console.log(x.MSRP);
+}
+}
+function removerows_from(table){
+if(table==null)
+{
+table="result";
+}
+var no_of_rows = document.getElementById(table).rows.length;
+console.log(no_of_rows);
+var i;
+for( i=1;i<=no_of_rows-1;i++)
+{
+document.getElementById(table).deleteRow(1);
+}
+
+}
+
+var gRadioValue = 'brands'; //global declared outside of function
+function myRadioFunc(){
+    var radioVal = gRadioValue;  
+    console.log("radio value is "+radioVal);
+    alert("radio value is "+radioVal);
+   
+}
+
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+function sort(){
+console.log("number of cars",current_cars.length);
+// year
+for(i =1990;i<2018;i++)
+{
+
+if(car_ye.indexOf(i.toString())>-1)
+{
+document.getElementById("23").classList.remove('hidden');
+document.getElementById(i.toString()).classList.remove('hidden');
+document.getElementById(i.toString()+"c").classList.remove('hidden');
+
+}
+else
+{
+  document.getElementById("23").classList.add('hidden');
+document.getElementById(i.toString()).classList.add('hidden');
+document.getElementById(i.toString()+"c").classList.add('hidden');
+
+}
+}
+// year till here
+for(i in allvs)
+{
+
+if(car_vs.indexOf(allvs[i])>-1)
+{
+console.log(allvs[i]);
+document.getElementById(allvs[i]).classList.remove('hidden');
+console.log(allvs[i].concat("c"));
+document.getElementById(allvs[i].concat("c")).classList.remove('hidden');
+document.getElementById("22").classList.remove('hidden');
+
+
+}
+else
+{
+document.getElementById(allvs[i]).classList.add('hidden');
+console.log(allvs[i].concat("c"));
+
+document.getElementById(allvs[i].concat("c")).classList.add('hidden');
+document.getElementById("22").classList.add('hidden');
+
+}
+}
+//for tt 
+for(i=2 ;i<5;i++)
+{
+
+if(car_tt.indexOf(i.toString())>-1)
+{
+document.getElementById(i.toString()).classList.remove('hidden');
+document.getElementById(i.toString()+"c").classList.remove('hidden');
+document.getElementById("21").classList.remove('hidden');
+
+
+}
+else
+{
+document.getElementById(i.toString()).classList.add('hidden');
+document.getElementById(i.toString()+"c").classList.add('hidden');
+document.getElementById("21").classList.add('hidden');
+
+
+}
+}
+// till here
+
+
+for(i=0;i<car_id.length;i++)
+{
+  console.log(car_id[i]);
+  console.log(car_ma[i]);
+  console.log(car_mo[i]) ;
+  console.log(car_ms[i]) ;
+  console.log(car_mc[i]) ;
+  console.log(car_vs[i]) ;
+  console.log(car_ye[i]) ;
+}
+console.log(car_id.filter(onlyUnique),countUnique(car_id));
+console.log(car_ma.filter(onlyUnique),countUnique(car_ma));
+console.log(car_mo.filter(onlyUnique),countUnique(car_mo));
+console.log(car_ms.filter(onlyUnique),countUnique(car_ms));
+console.log(car_mc.filter(onlyUnique),countUnique(car_mc));
+console.log(car_vs.filter(onlyUnique),countUnique(car_vs));
+console.log(car_ye.filter(onlyUnique),countUnique(car_ye));
+
+unique_manf = car_ma.filter(onlyUnique);
+for(i=0;i<unique_manf.length;i++)
+{
+var button = document.createElement("button");
+button.innerHTML = " "+unique_manf[i]+" ";
+button.id = i;
+var body = document.getElementById("facets");
+body.appendChild(button);
+var data = unique_manf[i];
+button.onclick = function() {myFunction(this.value)};
+
+}
+
+}
+
+function myFunction(st){
+alert(st);
+}
+function countUnique(iterable) {
+  return new Set(iterable).size;
+}
+
+</script>
+<script type="text/javascript">
+const btnSave = document.getElementById('Save');
+btnSave.addEventListener('click',e=>{
+console.log('Saved Search.');
+st = document.getElementById("search").value;
+if(st){
+var user_to_find = firebase.auth().currentUser.uid;
+var usersList = firebase.database().ref("users/");
+usersList.push ({
+   uid: user_to_find,
+   Term: st
+});
+
+alert('Saved');  
+}
+else
+{
+alert('Search Box is Empty!');
+}
+
+});
+
+
+function sort2(){
+console.log("number of cars",current_cars.length);
+// year
+for(i =1990;i<2018;i++)
+{
+
+
+document.getElementById("23").classList.add('hidden');
+document.getElementById(i.toString()).classList.add('hidden');
+document.getElementById(i.toString()+"c").classList.add('hidden');
+
+}
+// year till here
+for(i in allvs)
+{
+
+document.getElementById(allvs[i]).classList.add('hidden');
+//console.log(allvs[i].concat("c"));
+document.getElementById(allvs[i].concat("c")).classList.add('hidden');
+document.getElementById("22").classList.add('hidden');
+
+
+}
+//for tt 
+for(i=2 ;i<5;i++)
+{
+
+document.getElementById(i.toString()).classList.add('hidden');
+document.getElementById(i.toString()+"c").classList.add('hidden');
+document.getElementById("21").classList.add('hidden');
+
+}
+// till here
+
+
+
+}
+
+</script>
+
+</body>
+</html>
+

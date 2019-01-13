@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBVEVFEXwFR7vw51MRnvn5ie7snOD3iKXc",
+    authDomain: "inf551-projects.firebaseapp.com",
+    databaseURL: "https://inf551-projects.firebaseio.com",
+    projectId: "inf551-projects",
+    storageBucket: "inf551-projects.appspot.com",
+    messagingSenderId: "283444132904"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+
+//const txtEmail = document.getElementById('txtEmail');
+//const txtPass = document.getElementById('txtPass');
+
+
+function TogLogin(){
+
+console.log('Trying Login');
+
+var email = document.getElementById('txtEmail').value;
+var password = document.getElementById('txtPass').value;
+
+if (email.length < 4) {
+          alert('Please enter an email address.');
+          return;
+        }
+if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+        }
+
+firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+        });
+
+}
+
+function TogSignUp(){
+console.log('Trying SignUp');
+
+var email = document.getElementById('txtEmail').value;
+var password = document.getElementById('txtPass').value;
+if (email.length < 4) {
+          alert('Please enter an email address.');
+          return;
+        }
+if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+        }
+
+firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+      });
+
+
+}
+
+function initApp(){
+firebase.auth().onAuthStateChanged(function(user) {
+ if (user) {
+  var email = user.email;
+  alert('Welcome '+email);
+  window.location.href = "main.html";
+ }
+ else {
+  alert("Welcome to the Used Car Inventory System application! \nPlease Login / Signup.");
+ }
+});
+const btnLogin = document.getElementById('btnLogin');
+const btnSignup = document.getElementById('btnSignup');
+btnLogin.addEventListener('click',TogLogin,false);
+btnSignup.addEventListener('click',TogSignUp,false);
+
+/*
+if (firebase.auth().currentUser != null) {
+console.log("USER EXISTS!");
+}
+*/
+}
+
+
+ window.onload = function() {
+      initApp();
+    };
+
+</script>
+
+
+<script type="text/javascript">
+/*
+    document.getElementById("btnLogin").onclick = function () {
+        //alert('Hi');
+        location.href = "main.html";
+    };
+*/
+</script>
+
+<style>
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+body {
+    background-repeat: no-repeat;
+    width: 75%;
+}
+
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Used Car Inventory System</title>
+</head>
+<body background="img2.png" bgcolor="#F5F5DC">
+
+
+ <center><font face="verdana"><h1>Used Car Inventory System</h1></font></center>
+ <center><font face="Courier" color="blue"><h3>Login Page</h3></font></center>
+  
+  <center>
+
+	   <div class="form__field">
+	  </br></br>
+          <font color="green" face="Courier"><label for="myusername"><b>E-Mail:</b></label></font>
+          <input id="txtEmail" type="email" placeholder="Enter E-mail id" name="myusername" required>
+     </div>
+
+     <div class="form__field">
+          </br></br>
+          <font color="green" face="Courier"><label for="mypassword"><b>Password:</b></label></font>
+          <input id="txtPass" type="password" placeholder="Enter Password" name="mypassword" required>
+     </div>
+       </br></br>
+       </br></br>
+      <button id ="btnLogin">Log in</button>
+      <button id ="btnSignup">Sign up</button>                    
+
+	</center>
+
+
+</body>
+</html>
